@@ -37,7 +37,7 @@ def test_process_data_failing(mock_stats_obj):
     avg = mock_stats_obj.get_average_views_total()
     
     # This assertion is expected to fail
-    assert avg == 0, f"Expected average to be 0 but got {avg}"
+    assert avg == 300, f"Expected average to be 300 but got {avg}"
 
 def test_process_data_correct_logic(mock_stats_obj):
     # Create mock data

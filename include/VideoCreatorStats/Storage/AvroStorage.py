@@ -39,6 +39,8 @@ class AvroPandasStorage(BaseStorage):
                 avro_type = ['null', 'double']
             elif 'bool' in dtype_str:
                 avro_type = ['null', 'boolean']
+            elif 'datetime' in dtype_str:
+                avro_type = ['null', {'type': 'long', 'logicalType': 'timestamp-micros'}]
             elif 'object' in str(dtype):
                 val = df_clean[col].dropna().iloc[0] if not df_clean[col].dropna().empty else None
                 if isinstance(val, list):

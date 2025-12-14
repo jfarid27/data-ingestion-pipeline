@@ -58,13 +58,15 @@ Aggregated metrics for each creator.
 *   **Partitioning**: None (Time-partitioned by file name).
 *   **Schema**:
     *   `creator_id`: `long`
+    *   `timestamp`: `string` (Date of statistics, YYYY-MM-DD)
     *   `username`: `string`
     *   `follower_count`: `long`
     *   `avg_views`: `double` (Calculated from actual video data)
     *   `top_category`: `string`
     *   `avg_engagement`: `double` ((Likes + Comments + Shares) / Views)
-    *   `virality_score`: `double`
+    *   `virality_score`: `double` (Log (engagement / follower_count))
     *   `top_keywords`: `array<string>` (Top 3 keywords from captions)
+    *   `updated_at`: `long` (logicalType: timestamp-micros)
 
 ### 2. Processed Creators (`creators`)
 Cleaned version of the input creators dataset.

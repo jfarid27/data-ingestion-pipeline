@@ -115,6 +115,22 @@ class VideoCreatorStats:
              self.process_data()
         return self.merged.groupby('category')['views'].sum()
 
+    def get_trending_keywords(self, top_n=5):
+        """
+        Extract top trending keywords from all video captions in the dataset.
+
+        Args:
+            top_n (int): Number of top keywords to extract.
+
+        Returns:
+            list: List of top keywords.
+        """
+        if self.merged is None:
+            self.process_data()
+        
+        return self._get_top_keywords_for_text_series(self.merged['caption'], top_n)
+
+
     def get_top_keywords_by_video(self, top_n=3):
         """
         Extract top keywords from video captions for each video.
@@ -225,19 +241,24 @@ class VideoCreatorStats:
             avg_views = group['views'].mean()
             avg_engagement = total_engagement / total_views if total_views > 0 else 0
             
-            virality_score = np.exp(total_engagement / follower_count) if follower_count > 0 else 0
+            virality_score = np.log(total_engagement / follower_count) if follower_count > 0 else 0
             
             top_keywords = self._get_top_keywords_for_text_series(group['caption'], top_n=3)
+        
+            today_str = datetime.now().strftime('%Y-%m-%d')
+            updated_at = datetime.now()
             
             creator_stats = {
                 'creator_id': creator_id,
+                'timestamp': today_str,
                 'username': username,
                 'follower_count': follower_count,
                 'avg_views': avg_views,
                 'top_category': top_category,
                 'avg_engagement': avg_engagement,
                 'virality_score': virality_score,
-                'top_keywords': top_keywords
+                'top_keywords': top_keywords,
+                'updated_at': updated_at
             }
             
             top_keywords_str = ",".join(top_keywords)
@@ -292,6 +313,7 @@ class VideoCreatorStats:
         avg_by_creator = self.get_average_views_by_creator()
         views_cat = self.get_views_per_category()
         keywords = self.get_top_keywords_by_video()
+        top_keywords = self.get_trending_keywords()
         
         self.generate_creator_stats_table()
         
@@ -300,6 +322,7 @@ class VideoCreatorStats:
             "avg_views_by_creator": avg_by_creator,
             "views_per_category": views_cat,
             "top_keywords_by_video": keywords,
+            "trending_keywords": top_keywords,
             "creator_stats_table": self.stats_table
         }
 
@@ -324,6 +347,10 @@ def main():
     logging.info("Data saved successfully.")
     
     logging.info(f"Average Views Total: {results['avg_views_total']}")
+    logging.info(f"Average Views By Creator: {results['avg_views_by_creator']}")
+    logging.info(f"Views Per Category: {results['views_per_category']}")
+    logging.info(f"Top Keywords By Video: {results['top_keywords_by_video']}")
+    logging.info(f"Trending Keywords: {results['trending_keywords']}")
 
 if __name__ == "__main__":
     logging.basicConfig(
