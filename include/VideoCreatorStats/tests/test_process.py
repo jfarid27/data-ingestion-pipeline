@@ -1,12 +1,6 @@
 import pytest
 import pandas as pd
-import sys
-import os
-
-# Add parent directory to path to import process
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from process import VideoCreatorStats
+from VideoCreatorStats.process import VideoCreatorStats
 
 @pytest.fixture
 def mock_stats_obj(tmp_path):
