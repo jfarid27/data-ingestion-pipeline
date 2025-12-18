@@ -26,11 +26,11 @@ import pandas as pd
 import numpy as np
 import os
 import fastavro
-from .DataAnalytics.TextStatistics import TextStatistics
+from DataAnalytics.TextStatistics import TextStatistics
 from datetime import datetime
-from .config import creator_qa_pipeline, videos_qa_pipeline
-from .utils import IngestionFile
-from .Storage.AvroStorage import AvroPandasStorage
+from config import creator_qa_pipeline, videos_qa_pipeline
+from utils import IngestionFile
+from Storage.AvroStorage import AvroPandasStorage
 
 class VideoCreatorStats:
     """
